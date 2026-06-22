@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สรุปรวม — เทียบ 3 AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ECEAF4;
+    --surface:#FFFFFF;
+    --surface-2:#F5F4FB;
+    --ink:#1E1B2E;
+    --muted:#5F5A72;
+    --line:#DDD9EC;
+    --brand:#5B4BD6;
+    --brand-dk:#322A78;
+
+    --gpt:#10a37f;   --gpt-bg:#E4F5EF;
+    --gemini:#3b82f6;--gemini-bg:#E6EEFD;
+    --claude:#d97757;--claude-bg:#FBEDE6;
+
+    --agree:#1F7A4D; --agree-bg:#E4F3EA; --agree-bd:#B7DEC6;
+    --diff:#9A6A0E;  --diff-bg:#FBF0D9;  --diff-bd:#EAD3A0;
+    --stop:#B23A33;  --stop-bg:#F8E5E3;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Sarabun","IBM Plex Sans Thai",system-ui,sans-serif;
+    font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1040px;margin:0 auto;padding:0 18px 72px}
+
+  header{
+    background:linear-gradient(135deg,var(--brand-dk),var(--brand));
+    color:#fff;border-radius:0 0 22px 22px;
+    padding:38px 26px 30px;margin-bottom:26px;
+    box-shadow:0 10px 30px -16px rgba(50,42,120,.6);
+  }
+  header .inner{max-width:1040px;margin:0 auto}
+  header .kicker{
+    font-family:"IBM Plex Mono",monospace;font-size:12px;
+    letter-spacing:.18em;text-transform:uppercase;color:#C9C2F5;margin-bottom:10px;
+  }
+  header h1{font-family:"IBM Plex Sans Thai",sans-serif;font-weight:700;font-size:30px;line-height:1.2;margin:0 0 8px}
+  header p{margin:0;color:#E2DEF8;font-size:15px;max-width:64ch}
+  .legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+  .legend .src{
+    display:inline-flex;align-items:center;gap:7px;
+    background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.28);
+    color:#fff;font-size:12.5px;font-weight:600;padding:5px 11px;border-radius:999px;
+  }
+  .legend .src .dot{width:9px;height:9px;border-radius:50%}
+  .dot-gpt{background:var(--gpt)} .dot-gemini{background:var(--gemini)} .dot-claude{background:var(--claude)}
+
+  section{
+    background:var(--surface);border:1px solid var(--line);border-radius:16px;
+    padding:24px 22px;margin-bottom:20px;animation:rise .5s ease both;
+  }
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){section{animation:none}}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--brand);font-weight:600;margin-bottom:6px}
+  h2{font-family:"IBM Plex Sans Thai",sans-serif;font-weight:700;font-size:21px;margin:0 0 4px}
+  .sub{color:var(--muted);font-size:14.5px;margin:0 0 18px}
+  h3{font-family:"IBM Plex Sans Thai",sans-serif;font-weight:600;font-size:16px;margin:22px 0 10px}
+
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .card{border:1px solid var(--line);border-radius:12px;padding:15px 16px;background:var(--surface-2)}
+  .card h4{margin:0 0 8px;font-size:14px;display:flex;align-items:center;gap:7px;font-family:"IBM Plex Sans Thai",sans-serif}
+  .card.gpt h4{color:var(--gpt)} .card.gemini h4{color:var(--gemini)} .card.claude h4{color:var(--claude)}
+  .card ul{margin:0;padding-left:17px;font-size:13.6px}
+  .card li{margin-bottom:5px}
+
+  .agree-list{margin:0;padding-left:20px}
+  .agree-list li{margin-bottom:8px;font-size:14.8px}
+  .agree-list b{color:var(--brand-dk)}
+
+  .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:12px;border:1px solid var(--line)}
+  table{border-collapse:collapse;width:100%;min-width:720px;font-size:13.6px}
+  thead th{background:var(--brand-dk);color:#fff;text-align:left;font-weight:600;
+    font-family:"IBM Plex Sans Thai",sans-serif;padding:11px 12px;font-size:12.5px;white-space:nowrap}
+  thead th.gpt{background:var(--gpt)} thead th.gemini{background:var(--gemini)} thead th.claude{background:var(--claude)}
+  tbody td{padding:10px 12px;border-top:1px solid var(--line);vertical-align:top}
+  tbody tr:nth-child(even){background:var(--surface-2)}
+  td.item{font-weight:600;white-space:nowrap}
+  .tag{display:inline-block;font-size:11.5px;font-weight:600;padding:1px 7px;border-radius:999px;line-height:1.5}
+  .t-keep{color:var(--agree);background:var(--agree-bg)}
+  .t-stop{color:var(--stop);background:var(--stop-bg)}
+  .t-cycle{color:var(--diff);background:var(--diff-bg)}
+  .t-opt{color:#2A5C92;background:#E5EDF8}
+  .t-pick{color:var(--brand);background:#E9E6FA;font-weight:700}
+  .verdict-row td{background:#F0EEFA!important;border-top:2px solid var(--brand)}
+
+  .diffbox{border-left:4px solid var(--diff);background:var(--diff-bg);border-radius:0 12px 12px 0;padding:13px 16px;margin:12px 0;font-size:14.3px}
+  .diffbox b{color:#7a5409}
+
+  .plan{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:6px 0 4px}
+  .slot{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:13px}
+  .slot .t{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;color:var(--brand);text-transform:uppercase;margin-bottom:7px}
+  .slot .h{font-weight:600;font-size:14px;margin-bottom:8px}
+  .slot ul{margin:0;padding-left:16px;font-size:13.4px}
+  .slot li{margin-bottom:3px}
+
+  ul.tips{margin:8px 0 0;padding-left:20px;font-size:14.3px}
+  ul.tips li{margin-bottom:6px}
+  .note{font-size:13px;color:var(--muted);background:var(--surface-2);border:1px dashed var(--line);border-radius:10px;padding:12px 14px;margin-top:14px}
+  footer{text-align:center;color:var(--muted);font-size:12.5px;margin-top:28px;line-height:1.6}
+  footer .mono{font-family:"IBM Plex Mono",monospace}
+
+  @media (max-width:680px){
+    header h1{font-size:23px}
+    .cards{grid-template-columns:1fr}
+    .plan{grid-template-columns:1fr 1fr}
+    .wrap{padding:0 12px 56px}
+    section{padding:20px 15px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="kicker">Meta Summary · มิ.ย. 2026</div>
+    <h1>สรุปรวม: เทียบคำแนะนำ 3 AI</h1>
+    <p>นำแผนของ GPT, Gemini และ Claude มาวางเทียบกัน — ดูว่าตรงไหนเห็นพ้อง ตรงไหนแย้งกัน และควรสรุปยังไงให้ลงตัว</p>
+    <div class="legend">
+      <span class="src"><span class="dot dot-gpt"></span>GPT</span>
+      <span class="src"><span class="dot dot-gemini"></span>Gemini</span>
+      <span class="src"><span class="dot dot-claude"></span>Claude</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- 1. CONSENSUS -->
+  <section>
+    <div class="eyebrow">เห็นตรงกัน</div>
+    <h2>5 เรื่องที่ทั้ง 3 AI พูดตรงกัน</h2>
+    <p class="sub">เริ่มจากของชัวร์ก่อน — พวกนี้ทำตามได้เลยไม่ต้องคิดมาก</p>
+    <ul class="agree-list">
+      <li><b>วิตามินรวมเลือก Dr.PONG RDI 100</b> — ทุกเจ้าให้ตัด Blackmores Multivitamin Active ทิ้งเพราะซ้ำซ้อน</li>
+      <li><b>Astaxanthin เก็บแค่ตัวเดียว</b> — มี 3 ขวด (Wink White / Vida Q10 / Dr.PONG) ทุกเจ้าบอกห้ามกินพร้อมกัน (แต่เลือกคนละตัว ดูหัวข้อถัดไป)</li>
+      <li><b>เพิ่ม Fish Oil + Magnesium Bisglycinate</b> — ทั้งสามแนะนำให้เสริม 2 ตัวนี้ และเชียร์ Dr.PONG / NOW / Nordic Naturals เหมือนกัน</li>
+      <li><b>Probiotic และ Calcium + D3 กินต่อได้เรื่อยๆ</b> — ไม่มีใครค้าน</li>
+      <li><b>Inner Deo &amp; Apple Cider = กินตามต้องการ</b> — ไม่ใช่ของจำเป็น เอาไว้ใช้เฉพาะวัน</li>
+    </ul>
+  </section>
+
+  <!-- 2. DIVERGENCE -->
+  <section>
+    <div class="eyebrow">เห็นต่างกัน</div>
+    <h2>3 จุดที่แต่ละ AI แนะนำไม่เหมือนกัน</h2>
+    <p class="sub">จุดที่ต้องตัดสินใจเอง — ผมสรุปข้อแย้งและตัวเลือกที่ผมเชียร์ให้ด้านล่าง</p>
+
+    <h3>① Astaxanthin — เลือกขวดไหนดี?</h3>
+    <div class="cards">
+      <div class="card gpt"><h4><span class="card-dot"></span>GPT</h4><ul><li>เก็บ <b>ANA-X30</b> (มี Astaxanthin + Zinc + Selenium รวมในตัว)</li><li>ขวด Astaxanthin เดี่ยวทั้งหมด = ซ้ำ ตัดได้</li></ul></div>
+      <div class="card gemini"><h4>Gemini</h4><ul><li>เก็บ <b>Dr.PONG 6mg</b></li><li>เหตุผล: ระบุโดส 6 มก. ชัดเจน เป็นมาตรฐานที่หวังผลผิวได้</li></ul></div>
+      <div class="card claude"><h4>Claude</h4><ul><li>เก็บ <b>Vida Astaxanthin Q10</b></li><li>เหตุผล: คุ้มสุด เพราะพ่วง CoQ10 + วิต C + E</li></ul></div>
+    </div>
+    <div class="diffbox">
+      <b>สรุปของผม:</b> ถ้าจะให้คุ้มต่อขวด → <b>Vida Q10</b> (ได้ของแถมเยอะสุด) แต่ถ้าเป้าหมายคือ <b>ผมร่วง/สิว</b> อยู่แล้ว ANA-X ก็มี Astaxanthin + Zinc ในตัว ไม่ต้องซื้อ Astaxanthin แยกเลย — กินขวดที่เปิดอยู่ให้หมดก่อน แล้วค่อยซื้อซ้ำตัวเดียว
+    </div>
+
+    <h3>② วิตามินซี — Vida C500 หรือ Blackmores Bio C?</h3>
+    <div class="cards">
+      <div class="card gpt"><h4>GPT</h4><ul><li>Vida C500 กินได้ <b>ไม่จำเป็นทุกวัน</b></li></ul></div>
+      <div class="card gemini"><h4>Gemini</h4><ul><li><b>หยุด Vida C500</b> (สารน้อยกว่า) → เก็บ Blackmores Bio C Acerola</li></ul></div>
+      <div class="card claude"><h4>Claude</h4><ul><li>กินได้ทั้งคู่ ส่วนเกินขับทิ้ง · <b>ตัด Vida ได้</b>ถ้าจะลด</li></ul></div>
+    </div>
+    <div class="diffbox">
+      <b>สรุปของผม:</b> วิตามินซีกินเกินก็ขับทิ้งอยู่ดี ไม่ต้องซีเรียส — กินขวดที่มีให้หมด ถ้าจะซื้อซ้ำเลือก <b>Blackmores Bio C Acerola</b> (เด่นเรื่องผิว/คอลลาเจน) แต่ <b>ระวัง: Bio C มีซิงค์ซ่อนอยู่</b> ต้องนับรวมในโควตาซิงค์
+    </div>
+
+    <h3>③ L-Arginine (BAT) — กินต่อหรือเลิก?</h3>
+    <div class="cards">
+      <div class="card gpt"><h4>GPT</h4><ul><li>ซื้อซ้ำได้ <b>กิน 2 เดือน พัก 1 เดือน</b> (ช่วยไหลเวียนเลือด)</li></ul></div>
+      <div class="card gemini"><h4>Gemini</h4><ul><li><b>หยุดซื้อ</b> — ตัวนี้มีซิงค์ ทำให้ซิงค์รวมเกิน</li></ul></div>
+      <div class="card claude"><h4>Claude</h4><ul><li><b>กินตามต้องการ</b> (ก่อนออกกำลังกาย) วันไหนกินให้ลดซิงค์ตัวอื่น</li></ul></div>
+    </div>
+    <div class="diffbox">
+      <b>สรุปของผม:</b> เก็บไว้กิน <b>เฉพาะวันออกกำลังกาย</b> ก็พอ — แต่ตัวนี้มีซิงค์ จุดที่ Gemini กับ Claude เตือนตรงกันคือ <b>วันไหนกิน L-Arginine ต้องงดซิงค์ตัวอื่น</b> กันเกิน 40 มก./วัน
+    </div>
+  </section>
+
+  <!-- 3. SIDE-BY-SIDE TABLE -->
+  <section>
+    <div class="eyebrow">ตารางเทียบเต็ม</div>
+    <h2>คำแนะนำรายตัว · 3 AI วางเทียบกัน</h2>
+    <p class="sub">🟢 เก็บ/กินต่อ · 🟡 กินเป็นคอร์สแล้วพัก · 🔵 ตามต้องการ · 🔴 ตัด/ซ้ำซ้อน · 🟣 ตัวที่เลือกเป็นหลัก</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>ผลิตภัณฑ์</th><th class="gpt">GPT</th><th class="gemini">Gemini</th><th class="claude">Claude</th></tr></thead>
+        <tbody>
+          <tr><td class="item">Dr.PONG RDI 100 (วิตรวม)</td><td><span class="tag t-keep">ซื้อซ้ำ ★★★★★</span></td><td><span class="tag t-pick">เก็บตัวนี้</span></td><td><span class="tag t-keep">กินเรื่อยๆ</span></td></tr>
+          <tr><td class="item">Blackmores Multivitamin Active</td><td><span class="tag t-stop">ไม่ซื้อซ้ำ</span></td><td><span class="tag t-stop">หยุดซื้อ</span></td><td><span class="tag t-stop">ตัด (ซ้ำ)</span></td></tr>
+          <tr><td class="item">Vida Astaxanthin Q10</td><td><span class="tag t-stop">ตัด (ซ้ำ)</span></td><td><span class="tag t-stop">หยุดซื้อ</span></td><td><span class="tag t-pick">เก็บตัวนี้ ★</span></td></tr>
+          <tr><td class="item">Dr.PONG Astaxanthin 6mg</td><td><span class="tag t-stop">ตัด (ซ้ำ)</span></td><td><span class="tag t-pick">เก็บตัวนี้</span></td><td><span class="tag t-stop">ซ้ำ</span></td></tr>
+          <tr><td class="item">Wink White Astaxanthin</td><td><span class="tag t-stop">ไม่ซื้อซ้ำ</span></td><td><span class="tag t-stop">หยุดซื้อ</span></td><td><span class="tag t-stop">ซ้ำ</span></td></tr>
+          <tr><td class="item">Dr.PONG ANA-X30</td><td><span class="tag t-keep">ซื้อซ้ำ ★★★★★</span></td><td><span class="tag t-cycle">เลือก 1 / 3ด.พัก1</span></td><td><span class="tag t-keep">กินยาว 30–60 วัน</span></td></tr>
+          <tr><td class="item">Medita Zinc Plus</td><td><span class="tag t-stop">Zn ซ้ำ ตัด</span></td><td><span class="tag t-cycle">เลือก 1 (คู่ ANA-X)</span></td><td><span class="tag t-cycle">กินแล้วพัก</span></td></tr>
+          <tr><td class="item">Vida Zinc Biotin</td><td><span class="tag t-stop">Zn ซ้ำ ตัด</span></td><td><span class="tag t-stop">หยุดซื้อ</span></td><td><span class="tag t-cycle">กินแล้วพัก</span></td></tr>
+          <tr><td class="item">BAT L-Arginine + Zinc</td><td><span class="tag t-cycle">กิน2 พัก1 ★★★★</span></td><td><span class="tag t-stop">หยุดซื้อ (Zn ซ้ำ)</span></td><td><span class="tag t-opt">ตามต้องการ</span></td></tr>
+          <tr><td class="item">Vida C-500</td><td><span class="tag t-opt">ไม่จำเป็นทุกวัน</span></td><td><span class="tag t-stop">หยุดซื้อ</span></td><td><span class="tag t-keep">กินเรื่อยๆ / ตัดได้</span></td></tr>
+          <tr><td class="item">Blackmores Bio C Acerola</td><td><span class="tag t-opt">—</span></td><td><span class="tag t-pick">เก็บตัวนี้</span></td><td><span class="tag t-keep">กินเรื่อยๆ</span></td></tr>
+          <tr><td class="item">Fish Oil (Omega-3)</td><td><span class="tag t-keep">ซื้อซ้ำ ★★★★★</span></td><td><span class="tag t-keep">แนะนำเพิ่ม</span></td><td><span class="tag t-keep">แนะนำเพิ่ม</span></td></tr>
+          <tr><td class="item">Magnesium Bisglycinate</td><td><span class="tag t-keep">ซื้อซ้ำ ★★★★★</span></td><td><span class="tag t-keep">แนะนำเพิ่ม</span></td><td><span class="tag t-keep">แนะนำเพิ่ม</span></td></tr>
+          <tr><td class="item">Blackmores Bio Calcium + D3</td><td><span class="tag t-keep">ซื้อซ้ำ ★★★★★</span></td><td><span class="tag t-cycle">ซื้อต่อได้</span></td><td><span class="tag t-keep">กินเรื่อยๆ</span></td></tr>
+          <tr><td class="item">Dr.PONG 3D Probiotic</td><td><span class="tag t-keep">ซื้อซ้ำ ★★★★★</span></td><td><span class="tag t-keep">ซื้อต่อได้</span></td><td><span class="tag t-keep">กินเรื่อยๆ</span></td></tr>
+          <tr><td class="item">Dr.PONG Inner Deo</td><td><span class="tag t-opt">แล้วแต่พอใจ</span></td><td><span class="tag t-opt">ตามจำเป็น</span></td><td><span class="tag t-opt">ตามต้องการ</span></td></tr>
+          <tr><td class="item">Wink White Apple Cider</td><td><span class="tag t-stop">ไม่ชัดเจน</span></td><td><span class="tag t-opt">ตามชอบ</span></td><td><span class="tag t-opt">ตามต้องการ</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 4. FINAL UNIFIED PLAN -->
+  <section>
+    <div class="eyebrow">แผนสรุปสุดท้าย</div>
+    <h2>ตารางกินที่ผมรวมจากทั้ง 3 เจ้า</h2>
+    <p class="sub">ตัดของซ้ำออก เหลือชุดที่ลงตัว · ของละลายในไขมันกินกับมื้อมีไขมัน · แยกแคลเซียมจากซิงค์ ≥ 2 ชม.</p>
+    <div class="plan">
+      <div class="slot">
+        <div class="t">🌅 หลังอาหารเช้า</div>
+        <div class="h">มื้อมีไขมัน</div>
+        <ul>
+          <li>Dr.PONG RDI 100</li>
+          <li>Astaxanthin (1 ตัว)</li>
+          <li>ANA-X30</li>
+          <li>Fish Oil</li>
+        </ul>
+      </div>
+      <div class="slot">
+        <div class="t">☀️ หลังอาหารกลางวัน</div>
+        <div class="h">กับอาหาร</div>
+        <ul>
+          <li>วิตามินซี (ถ้าต้องการ)</li>
+        </ul>
+      </div>
+      <div class="slot">
+        <div class="t">🌙 หลังอาหารเย็น</div>
+        <div class="h">แยกจากซิงค์</div>
+        <ul>
+          <li>Calcium + D3</li>
+        </ul>
+      </div>
+      <div class="slot">
+        <div class="t">😴 ก่อนนอน</div>
+        <div class="h">ช่วยหลับ/ฟื้นตัว</div>
+        <ul>
+          <li>Magnesium 200–350 มก.</li>
+          <li>Probiotic</li>
+        </ul>
+      </div>
+    </div>
+    <div class="diffbox" style="border-left-color:var(--brand);background:#E9E6FA">
+      <b style="color:var(--brand-dk)">🔵 ตามต้องการ:</b> Inner Deo (วันกังวลกลิ่น) · Apple Cider (ก่อนมื้อหนัก) · L-Arginine (วันออกกำลังกาย — วันนั้นงดซิงค์ตัวอื่น)
+    </div>
+
+    <h3>กฎทอง 3 ข้อที่ทุกเจ้าย้ำตรงกัน</h3>
+    <ul class="tips">
+      <li><b>ซิงค์รวมทุกแหล่ง ≤ 40 มก./วัน</b> — จุดเสี่ยงสุด เพราะซิงค์แอบซ่อนใน ANA-X, วิตรวม, Bio C, L-Arginine</li>
+      <li><b>ของละลายในไขมัน</b> (Astaxanthin, วิต D, น้ำมันปลา) กินกับมื้อมีไขมันเสมอ</li>
+      <li><b>เลือกอย่างละ 1 ตัวในกลุ่มที่ซ้ำ</b> (Astaxanthin / วิตรวม / ซิงค์) — กินขวดที่เปิดอยู่ให้หมดก่อนซื้อใหม่</li>
+    </ul>
+
+    <div class="note">
+      <b>หมายเหตุ:</b> ตารางนี้สังเคราะห์จากข้อมูลในแท็บ GPT / Gemini / Claude เท่านั้น เป็นความรู้ทั่วไปเพื่อช่วยจัดระเบียบการกิน <b>ไม่ใช่คำแนะนำทางการแพทย์</b> — มีโรคประจำตัว/กินยาประจำ/ตั้งครรภ์ ควรปรึกษาเภสัชกรหรือแพทย์ก่อน (โดยเฉพาะเรื่องซิงค์รวมและ L-Arginine)
+    </div>
+  </section>
+
+  <footer>
+    <div>สรุปเปรียบเทียบโดย Claude · รวบรวมจากแผนของ GPT, Gemini และ Claude</div>
+    <div class="mono" style="margin-top:8px">มิถุนายน 2026</div>
+  </footer>
+
+</div>
+</body>
+</html>

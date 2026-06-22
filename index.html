@@ -16,6 +16,7 @@
     --gpt:#10a37f;
     --gemini:#3b82f6;
     --claude:#d97757;
+    --summary:#5B4BD6;
     --line:rgba(255,255,255,.10);
   }
   *{box-sizing:border-box}
@@ -70,6 +71,7 @@
   .tab[data-src="gpt"] .dot{background:var(--gpt)}
   .tab[data-src="gemini"] .dot{background:var(--gemini)}
   .tab[data-src="claude"] .dot{background:var(--claude)}
+  .tab[data-src="summary"] .dot{background:var(--summary)}
   .tab.active{
     color:var(--ink);
     background:var(--bg);
@@ -78,6 +80,7 @@
   .tab[data-src="gpt"].active{color:var(--gpt)}
   .tab[data-src="gemini"].active{color:var(--gemini)}
   .tab[data-src="claude"].active{color:var(--claude)}
+  .tab[data-src="summary"].active{color:var(--summary)}
 
   main{flex:1;min-height:0;background:var(--bg)}
   iframe{
@@ -104,6 +107,7 @@
     <button class="tab active" data-src="gpt"><span class="dot"></span>GPT</button>
     <button class="tab" data-src="gemini"><span class="dot"></span>Gemini</button>
     <button class="tab" data-src="claude"><span class="dot"></span>Claude</button>
+    <button class="tab" data-src="summary"><span class="dot"></span>สรุปรวม</button>
   </div>
 </header>
 
@@ -111,6 +115,7 @@
   <iframe class="active" data-src="gpt" src="GPTVitamin.html" title="แผนวิตามินจาก GPT"></iframe>
   <iframe data-src="gemini" src="GeminiVitamin.html" title="แผนวิตามินจาก Gemini"></iframe>
   <iframe data-src="claude" src="ClaudeVitamin.html" title="แผนวิตามินจาก Claude"></iframe>
+  <iframe data-src="summary" src="SummaryVitamin.html" title="สรุปรวมเทียบ 3 AI"></iframe>
 </main>
 
 <script>
