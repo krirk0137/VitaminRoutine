@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สรุปอาหารเสริม</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EBF0EE;
+    --surface:#FFFFFF;
+    --surface-2:#F4F8F6;
+    --ink:#16231E;
+    --muted:#5A6B64;
+    --line:#DCE5E1;
+    --teal:#0E6E5B;
+    --teal-dk:#093F35;
+    --gold:#B5851A;
+
+    --go:#1F7A4D;    --go-bg:#E4F3EA;    --go-bd:#B7DEC6;
+    --hold:#9A6A0E;  --hold-bg:#FBF0D9;  --hold-bd:#EAD3A0;
+    --opt:#2A5C92;   --opt-bg:#E5EDF8;   --opt-bd:#C2D6EE;
+    --stop:#B23A33;  --stop-bg:#F8E5E3;  --stop-bd:#EDC4C0;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Sarabun","IBM Plex Sans Thai",system-ui,sans-serif;
+    font-size:16px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:980px;margin:0 auto;padding:0 18px 72px}
+
+  /* Header */
+  header{
+    background:linear-gradient(135deg,var(--teal-dk),var(--teal));
+    color:#fff;
+    border-radius:0 0 22px 22px;
+    padding:38px 26px 30px;
+    margin-bottom:26px;
+    box-shadow:0 10px 30px -16px rgba(9,63,53,.6);
+  }
+  header .inner{max-width:980px;margin:0 auto}
+  header .kicker{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+    color:#9FE3D1;margin-bottom:10px;
+  }
+  header h1{
+    font-family:"IBM Plex Sans Thai",sans-serif;
+    font-weight:700;font-size:30px;line-height:1.2;margin:0 0 8px;
+  }
+  header p{margin:0;color:#D6F0E9;font-size:15px;max-width:60ch}
+
+  /* Legend */
+  .legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+  .legend .pill{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.28);color:#fff}
+
+  /* Status pills */
+  .pill{
+    display:inline-flex;align-items:center;gap:6px;
+    font-family:"IBM Plex Sans Thai",sans-serif;
+    font-size:12.5px;font-weight:600;line-height:1;
+    padding:5px 10px;border-radius:999px;border:1px solid transparent;white-space:nowrap;
+  }
+  .pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;flex:none}
+  .p-go{color:var(--go);background:var(--go-bg);border-color:var(--go-bd)}
+  .p-hold{color:var(--hold);background:var(--hold-bg);border-color:var(--hold-bd)}
+  .p-opt{color:var(--opt);background:var(--opt-bg);border-color:var(--opt-bd)}
+  .p-stop{color:var(--stop);background:var(--stop-bg);border-color:var(--stop-bd)}
+
+  /* Sections */
+  section{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:24px 22px;
+    margin-bottom:20px;
+    animation:rise .5s ease both;
+  }
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){section{animation:none}}
+
+  .eyebrow{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--teal);font-weight:600;margin-bottom:6px;
+  }
+  h2{
+    font-family:"IBM Plex Sans Thai",sans-serif;
+    font-weight:700;font-size:21px;margin:0 0 4px;
+  }
+  .sub{color:var(--muted);font-size:14.5px;margin:0 0 18px}
+  h3{font-family:"IBM Plex Sans Thai",sans-serif;font-weight:600;font-size:16px;margin:22px 0 10px}
+
+  /* Callout */
+  .warn{
+    background:var(--stop-bg);border:1px solid var(--stop-bd);
+    border-radius:12px;padding:14px 16px;margin:0 0 16px;
+    font-size:14.5px;
+  }
+  .warn strong{color:var(--stop)}
+
+  /* Tables */
+  .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:12px;border:1px solid var(--line)}
+  table{border-collapse:collapse;width:100%;min-width:560px;font-size:14px}
+  thead th{
+    background:var(--teal-dk);color:#fff;text-align:left;font-weight:600;
+    font-family:"IBM Plex Sans Thai",sans-serif;
+    padding:11px 13px;font-size:13px;letter-spacing:.01em;white-space:nowrap;
+  }
+  tbody td{padding:11px 13px;border-top:1px solid var(--line);vertical-align:top}
+  tbody tr:nth-child(even){background:var(--surface-2)}
+  td .name{font-weight:600}
+  .data{font-family:"IBM Plex Mono",monospace;font-weight:500;font-size:13px;color:var(--teal-dk)}
+  .star{color:var(--gold);font-weight:700}
+
+  /* Timeline */
+  .timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:4px 0 8px}
+  .slot{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:13px 13px 15px}
+  .slot .t{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;color:var(--teal);text-transform:uppercase;margin-bottom:7px}
+  .slot .h{font-weight:600;font-size:14.5px;margin-bottom:8px}
+  .slot ul{margin:0;padding-left:16px;font-size:13.5px;color:var(--ink)}
+  .slot li{margin-bottom:3px}
+
+  /* Two-col buy lists */
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .box{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--surface-2)}
+  .box h4{margin:0 0 8px;font-family:"IBM Plex Sans Thai",sans-serif;font-size:14.5px;display:flex;align-items:center;gap:7px}
+  .box ul{margin:0;padding-left:18px;font-size:13.8px}
+  .box li{margin-bottom:4px}
+  .dot{width:9px;height:9px;border-radius:50%;flex:none}
+  .d-go{background:var(--go)} .d-stop{background:var(--stop)} .d-opt{background:var(--opt)}
+
+  /* Pick highlight */
+  .pick{
+    border-left:4px solid var(--teal);
+    background:var(--surface-2);
+    border-radius:0 12px 12px 0;
+    padding:13px 16px;margin:14px 0;font-size:14.5px;
+  }
+  .pick b{color:var(--teal-dk)}
+
+  ul.tips{margin:8px 0 0;padding-left:20px;font-size:14px;color:var(--ink)}
+  ul.tips li{margin-bottom:5px}
+
+  .note{font-size:13px;color:var(--muted);background:var(--surface-2);border:1px dashed var(--line);border-radius:10px;padding:12px 14px;margin-top:14px}
+
+  footer{text-align:center;color:var(--muted);font-size:12.5px;margin-top:28px;line-height:1.6}
+  footer .mono{font-family:"IBM Plex Mono",monospace}
+
+  @media (max-width:640px){
+    header h1{font-size:24px}
+    .timeline{grid-template-columns:1fr 1fr}
+    .cols{grid-template-columns:1fr}
+    .wrap{padding:0 12px 56px}
+    section{padding:20px 15px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="kicker">Supplement Plan · มิ.ย. 2026</div>
+    <h1>สรุปอาหารเสริมทั้งหมด</h1>
+    <p>รวมตารางกินวิตามิน 15 ตัว + เปรียบเทียบแมกนีเซียม + เปรียบเทียบน้ำมันปลา เรียบเรียงจากส่วนผสมจริงบนฉลาก</p>
+    <div class="legend">
+      <span class="pill">🟢 กินได้เรื่อยๆ</span>
+      <span class="pill">🟡 กินแล้วพัก</span>
+      <span class="pill">🔵 ตามต้องการ</span>
+      <span class="pill">🔴 ซ้ำซ้อน/ระวัง</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- SECTION 1: OVERLAPS -->
+  <section>
+    <div class="eyebrow">เรื่องด่วน</div>
+    <h2>3 จุดที่กินซ้ำซ้อน — แก้ก่อนเลย</h2>
+    <p class="sub">ถ้ากินทุกตัวพร้อมกันจะเปลืองเงิน และเรื่องซิงค์อาจเกินขนาดด้วย</p>
+
+    <div class="warn">
+      <strong>ซิงค์คือจุดที่ต้องระวังสุด</strong> — มีซิงค์โดยตรง 3 ตัว (Vida Zinc Biotin, BAT L-arginine, Medita) แถมแอบซ่อนใน Ana-X, วิตามินรวม และ Bio C อีก รวมกันอาจเกิน 40 มก./วัน ซึ่งกินแบบนี้นานๆ เสี่ยงขาดทองแดงและภูมิคุ้มกันลด
+    </div>
+
+    <div class="scroll">
+      <table>
+        <thead><tr><th>กลุ่มที่ซ้ำ</th><th>ตัวที่ซ้ำกัน</th><th>คำแนะนำ</th></tr></thead>
+        <tbody>
+          <tr><td class="name">Astaxanthin ×3</td><td>Wink White · Vida Q10 · Dr.PONG <span class="data">(~6 มก. ทุกตัว)</span></td><td>เลือก <b>1 ตัว</b> — แนะนำ Vida (มี CoQ10+C+E)</td></tr>
+          <tr><td class="name">วิตามินรวม ×2</td><td>Blackmores Multivitamin Active · Dr.PONG RDI 100</td><td>เลือก <b>1 ตัว</b> (กันวิต A/E สะสมเกิน)</td></tr>
+          <tr><td class="name">ซิงค์ ×3+</td><td>Vida Zinc Biotin · BAT L-arginine · Medita Zinc Plus</td><td>เลือกตัวหลัก <b>1 ตัว</b> · รวมทุกแหล่ง <span class="data">≤ 40 มก./วัน</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SECTION 2: DAILY SCHEDULE -->
+  <section>
+    <div class="eyebrow">ตารางรายวัน</div>
+    <h2>กินตอนไหน (ชุดที่ตัดให้พอดีแล้ว)</h2>
+    <p class="sub">ของละลายในไขมันกินกับมื้อมีไขมัน · แยกแคลเซียมจากซิงค์อย่างน้อย 2 ชม.</p>
+
+    <div class="timeline">
+      <div class="slot">
+        <div class="t">🌅 เช้า</div>
+        <div class="h">หลังอาหารเช้า</div>
+        <ul>
+          <li>วิตามินรวม (1 ตัว)</li>
+          <li>Astaxanthin (1 ตัว)</li>
+          <li>Ana-X (2 แคปฯ)</li>
+          <li>Bio C Acerola</li>
+        </ul>
+      </div>
+      <div class="slot">
+        <div class="t">☀️ กลางวัน</div>
+        <div class="h">กับอาหาร</div>
+        <ul>
+          <li>ซิงค์ (1 ตัว)</li>
+          <li>Vida C-500 (ถ้าต้องการ)</li>
+        </ul>
+      </div>
+      <div class="slot">
+        <div class="t">🌙 เย็น</div>
+        <div class="h">กับอาหารเย็น</div>
+        <ul>
+          <li>Calcium + D3<br>(แยกจากซิงค์)</li>
+        </ul>
+      </div>
+      <div class="slot">
+        <div class="t">😴 ก่อนนอน</div>
+        <div class="h">หรือตามฉลาก</div>
+        <ul>
+          <li>Probiotic</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pick">
+      <b>🔵 ตามต้องการ:</b> Inner Deo (วันกังวลกลิ่น) · Apple Cider (ก่อนมื้อหนัก) · L-arginine (ก่อนออกกำลังกาย — วันไหนกินตัวนี้ ให้ลดซิงค์ตัวอื่น)
+    </div>
+  </section>
+
+  <!-- SECTION 3: 15 ITEMS DETAIL -->
+  <section>
+    <div class="eyebrow">รายละเอียด</div>
+    <h2>วิตามินทั้ง 15 ตัว</h2>
+    <p class="sub">สถานะ: กินเรื่อยๆ / กินแล้วพัก / ตามต้องการ / ซ้ำซ้อน</p>
+
+    <div class="scroll">
+      <table>
+        <thead><tr><th>ผลิตภัณฑ์</th><th>คืออะไร / สารหลัก</th><th>สถานะ</th><th>หมายเหตุ</th></tr></thead>
+        <tbody>
+          <tr><td class="name">Dr.PONG RDI 100</td><td>วิตามินรวม (C, A, E, B, D, Ca, Mg, Zn)</td><td><span class="pill p-go">กินเรื่อยๆ</span></td><td>เลือกระหว่างตัวนี้กับ Multivitamin Active</td></tr>
+          <tr><td class="name">Blackmores Multivitamin Active</td><td>วิตามินรวม เน้น B พลังงาน</td><td><span class="pill p-stop">เลือกตัวเดียว</span></td><td>ซ้ำกับ RDI 100</td></tr>
+          <tr><td class="name">Vida Astaxanthin Q10 <span class="star">★</span></td><td>Astaxanthin 6 + CoQ10 10 + C + E</td><td><span class="pill p-go">กินเรื่อยๆ</span></td><td>คุ้มสุดในกลุ่ม astaxanthin — เก็บตัวนี้</td></tr>
+          <tr><td class="name">Dr.PONG Astaxanthin 6mg</td><td>Astaxanthin 6 มก. ล้วน</td><td><span class="pill p-stop">ซ้ำ</span></td><td>ซ้ำกับ Vida</td></tr>
+          <tr><td class="name">Wink White Astaxanthin</td><td>Astaxanthin ~6 มก. เน้นผิว</td><td><span class="pill p-stop">ซ้ำ</span></td><td>ซ้ำกับ Vida</td></tr>
+          <tr><td class="name">Vida C-500 Complex</td><td>วิตามิน C 500 มก.</td><td><span class="pill p-go">กินเรื่อยๆ</span></td><td>ส่วนเกินขับทิ้ง · ตัดได้ถ้าจะลด</td></tr>
+          <tr><td class="name">Blackmores Bio C Acerola Plus</td><td>อะเซโรลา + โรสฮิพ + วิต E + ซิงค์ (เน้นผิว)</td><td><span class="pill p-go">กินเรื่อยๆ</span></td><td>ไม่ใช่ C โดสสูง · มีซิงค์ซ่อน</td></tr>
+          <tr><td class="name">Medita Zinc Plus</td><td>Zinc gluconate ~10 + B3 + C + คอลลาเจน</td><td><span class="pill p-hold">กินแล้วพัก</span></td><td>เป็นสิว: กินเป็นคอร์ส 1–3 เดือน</td></tr>
+          <tr><td class="name">Vida Zinc Biotin</td><td>ซิงค์ + ไบโอติน (ผม/เล็บ)</td><td><span class="pill p-hold">กินแล้วพัก</span></td><td>ไบโอตินรบกวนผลตรวจเลือด</td></tr>
+          <tr><td class="name">Dr.PONG Ana-X 30</td><td>Annurca apple + ซิงค์ 7.5 + ไบโอติน + D3</td><td><span class="pill p-go">กินยาว 30–60 วัน</span></td><td>มีทั้งซิงค์และไบโอติน · 2 แคปฯ/วัน</td></tr>
+          <tr><td class="name">Dr.PONG 3D Probiotic</td><td>โพรไบโอติกหลายสายพันธุ์</td><td><span class="pill p-go">กินเรื่อยๆ</span></td><td>กินสม่ำเสมอ ก่อนนอน/ตามฉลาก</td></tr>
+          <tr><td class="name">Blackmores Bio Calcium + D3</td><td>แคลเซียม + วิตามิน D3</td><td><span class="pill p-go">กินเรื่อยๆ</span></td><td>มื้อเย็น · แยกจากซิงค์/วิตรวม</td></tr>
+          <tr><td class="name">BAT L-arginine + Zinc</td><td>L-arginine 1000 + ซิงค์ (ไหลเวียน/ออกกำลัง)</td><td><span class="pill p-opt">ตามต้องการ</span></td><td>มีซิงค์ · ระวังถ้าเป็นเริม/กินยาความดัน</td></tr>
+          <tr><td class="name">Dr.PONG Inner Deo</td><td>ผงลูกพลับญี่ปุ่น ลดกลิ่นกาย</td><td><span class="pill p-opt">ตามต้องการ</span></td><td>วันที่ต้องการก็พอ</td></tr>
+          <tr><td class="name">Wink White Apple Cider</td><td>แอปเปิลไซเดอร์ (ย่อย/ควบคุมน้ำหนัก)</td><td><span class="pill p-opt">ตามต้องการ</span></td><td>ก่อนมื้อหนัก · ระวังฟัน/ยาเบาหวาน</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>สรุป: ซื้อต่อ / ไม่ต้องซื้อ</h3>
+    <div class="cols">
+      <div class="box">
+        <h4><span class="dot d-go"></span>ซื้อต่อ (ชุดหลัก)</h4>
+        <ul>
+          <li>วิตามินรวม 1 ตัว</li>
+          <li>Astaxanthin 1 ตัว (Vida)</li>
+          <li>Probiotic · Calcium+D3</li>
+          <li>ซิงค์ 1 ตัว (ตามเป้าหมาย)</li>
+          <li>Ana-X (ถ้ากังวลผมร่วง)</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h4><span class="dot d-stop"></span>ไม่ต้องซื้อซ้ำ</h4>
+        <ul>
+          <li>Astaxanthin อีก 2 ตัว</li>
+          <li>วิตามินรวมตัวที่ 2</li>
+          <li>ซิงค์ที่เกินมา</li>
+          <li>Vida C-500 (ตัดได้ถ้าจะลด)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: MAGNESIUM -->
+  <section>
+    <div class="eyebrow">เพิ่มเติม · แมกนีเซียม</div>
+    <h2>แมกนีเซียม ตัวไหนดี</h2>
+    <p class="sub">ดูที่ "แมกนีเซียมธาตุจริง (elemental)" ไม่ใช่เลขสารประกอบบนกล่อง</p>
+
+    <div class="warn">
+      <strong>Blackmores Bio Magnesium Advance ไม่ใช่ glycinate</strong> — เป็นแมกนีเซียมออกไซด์ ดูดซึมแย่กว่าและถ่ายเหลวง่ายกว่า คนละกลุ่มกับที่กำลังหา
+    </div>
+
+    <div class="scroll">
+      <table>
+        <thead><tr><th>ผลิตภัณฑ์</th><th>ฟอร์ม</th><th>ธาตุจริง</th><th>จุดเด่น</th></tr></thead>
+        <tbody>
+          <tr><td class="name">NOW Foods Mag Glycinate (BioPerine) <span class="star">★</span></td><td>Albion® bisglycinate</td><td class="data">200 มก./2 แคปฯ</td><td>เกรดทอง · BioPerine ช่วยดูดซึม · ทดสอบ 3rd-party</td></tr>
+          <tr><td class="name">Protriva Mag Bisglycinate Plus</td><td>Albion chelate</td><td class="data">ไม่ระบุชัด</td><td>+ วิตามิน K2 + D3 · หาในไทยง่าย</td></tr>
+          <tr><td class="name">Dr.PONG Mag 350 (Bisglycinate)</td><td>บิสไกลซิเนต คีเลต 20%</td><td class="data">175/เม็ด → 350/2 เม็ด</td><td>โดสเต็มสุดในแบรนด์ไทย</td></tr>
+          <tr><td class="name">Vida Mag Bisglycinate Plus</td><td>บิสไกลซิเนต</td><td class="data">ไม่ระบุชัด</td><td>+ L-theanine ช่วยนอน <span style="color:var(--stop)">⚠ มีซิงค์</span></td></tr>
+          <tr><td class="name">BAT Mag Bisglycinate</td><td>บิสไกลซิเนต</td><td class="data">— ยืนยันไม่ได้</td><td>เช็กฉลาก</td></tr>
+          <tr><td class="name">Blackmores Bio Mag Advance</td><td style="color:var(--stop)">⚠ แมกนีเซียมออกไซด์</td><td class="data">~300 มก.</td><td>คนละกลุ่ม · เหมาะเป็นแมกฯ ทั่วไป/ขับถ่าย</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pick">
+      <b>แนะนำที่สุด: NOW Foods Magnesium Glycinate (BioPerine)</b> — ใช้ Albion® chelate ที่จับคู่สมบูรณ์จริง ไม่แอบผสมออกไซด์ ทดสอบความบริสุทธิ์ และคุ้มต่อมิลลิกรัม<br>
+      <b>รองลงมา:</b> Protriva (Albion + K2/D3, ซื้อในไทยง่าย) · Dr.PONG Mag 350 (ธาตุจริงสูงสุดในแบรนด์ไทย — เช็กว่าเป็นเวอร์ชัน Bisglycinate ไม่ใช่ Oxide)
+    </div>
+
+    <ul class="tips">
+      <li>เริ่มที่ <span class="data">100–200 มก.</span> ก่อนกันถ่ายเหลว · กินตอนเย็น/ก่อนนอนพร้อมอาหาร</li>
+      <li>รวมจากอาหารเสริมทุกแหล่ง <span class="data">≤ 350 มก./วัน</span></li>
+      <li>ตัวเลือก iHerb อื่นที่คุ้ม: Doctor's Best, Nutricost</li>
+    </ul>
+  </section>
+
+  <!-- SECTION 5: FISH OIL -->
+  <section>
+    <div class="eyebrow">เพิ่มเติม · น้ำมันปลา</div>
+    <h2>น้ำมันปลา ตัวไหนดี</h2>
+    <p class="sub">เลข "1000 มก." คือน้ำมันปลารวม · ตัวสำคัญคือ EPA + DHA จริง (1000 มก. มักให้ EPA+DHA แค่ ~300 มก.)</p>
+
+    <div class="scroll">
+      <table>
+        <thead><tr><th>ผลิตภัณฑ์</th><th>EPA / DHA ต่อแคปฯ</th><th>เหมาะกับ</th></tr></thead>
+        <tbody>
+          <tr><td class="name">Blackmores Fish Oil 1000mg</td><td class="data">EPA 180 / DHA 120 (300)</td><td>ทั่วไป · แบรนด์น่าเชื่อถือ</td></tr>
+          <tr><td class="name">Dr.PONG Daily Omega-3 1000mg +E</td><td class="data">EPA 180 / DHA 120 (รวม 350)</td><td>ทั่วไป · ไร้กลิ่นคาว + ถูกกว่า (สูตรเดียวกับ Blackmores)</td></tr>
+          <tr><td class="name">Dr.PONG 4X DHA 500mg +E</td><td class="data">DHA 500 (EPA ~100)</td><td>เน้นสมอง / ความจำ / สายตา</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>ตัวเข้มข้นที่คุ้มกว่า (แนะนำขยับไป)</h3>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>ผลิตภัณฑ์</th><th>EPA / DHA</th><th>หมายเหตุ</th></tr></thead>
+        <tbody>
+          <tr><td class="name">Blackmores Omega Triple 1500mg</td><td class="data">EPA 540 / DHA 360 (900)</td><td>หาในไทยง่าย · เม็ดเดียว = 3 เม็ดธรรมดา</td></tr>
+          <tr><td class="name">NOW Foods Ultra Omega-3</td><td class="data">EPA 500 / DHA 250 (750)</td><td>เคลือบ enteric ไม่เรอคาว · คุ้มสุด (iHerb)</td></tr>
+          <tr><td class="name">Nordic Naturals Ultimate Omega</td><td class="data">รวม ~1280/เสิร์ฟ</td><td>rTG ดูดซึมดี · พรีเมียม (iHerb)</td></tr>
+          <tr><td class="name">Sports Research Triple Strength</td><td class="data">EPA/DHA สูง</td><td>MSC certified · คุ้มค่า (iHerb)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pick">
+      <b>ถ้าเลือกจาก 3 ตัวแรก:</b> ทั่วไป → Dr.PONG Daily (คุ้มกว่า · แต่ต้องกิน 2 เม็ด) · สมอง/สายตา → 4X DHA<br>
+      <b>ถ้าให้ดีจริง:</b> ขยับไปตัวเข้มข้น เช่น Blackmores Omega Triple หรือ NOW Ultra Omega-3 — เม็ดเดียวได้ EPA+DHA เยอะกว่า
+    </div>
+
+    <ul class="tips">
+      <li>ตั้งเป้า EPA+DHA รวม <span class="data">250–500 มก./วัน</span> สำหรับสุขภาพทั่วไป</li>
+      <li>เลือก rTG/triglyceride form · มองหา molecular distillation หรือ IFOS · กินพร้อมมื้อมีไขมัน</li>
+      <li><b>ซินเนอร์จี้:</b> Astaxanthin ที่มีอยู่จับคู่กับน้ำมันปลาได้ดี — ช่วยสายตา + กันน้ำมันหืน</li>
+    </ul>
+  </section>
+
+  <!-- SECTION 6: GENERAL CAUTIONS -->
+  <section>
+    <div class="eyebrow">ข้อควรระวังรวม</div>
+    <h2>กฎทอง 5 ข้อ</h2>
+    <ul class="tips">
+      <li><b>ซิงค์รวมทุกแหล่ง ≤ 40 มก./วัน</b> — จุดเสี่ยงสุดของชุดนี้</li>
+      <li><b>ของละลายในไขมัน</b> (Astaxanthin, วิต D, CoQ10, น้ำมันปลา) กินกับมื้อมีไขมัน</li>
+      <li><b>แยกแคลเซียมจากซิงค์/แร่ธาตุ</b> อย่างน้อย 2 ชม.</li>
+      <li><b>ไบโอติน</b> (Vida Zinc Biotin + Ana-X) หยุด 2–3 วันก่อนเจาะเลือด — กันค่าไทรอยด์/หัวใจเพี้ยน</li>
+      <li><b>Apple Cider</b> บ้วนปากตาม กันกัดฟัน · ระวังถ้ากินยาเบาหวาน/ขับปัสสาวะ</li>
+    </ul>
+
+    <div class="note">
+      <b>หมายเหตุความแม่นยำ:</b> ยืนยันฉลากแล้ว — Dr.PONG (Ana-X, Inner Deo, RDI 100, Mag 350, Omega-3 Daily), Blackmores (Bio C, Fish Oil, Omega Triple), Vida Astaxanthin Q10, Medita, NOW Foods · <b>ยังยืนยันตัวเลขเป๊ะไม่ได้</b> — ปริมาณ elemental ของ Vida/Protriva/BAT Magnesium, EPA ของ Dr.PONG 4X DHA, และปริมาณ astaxanthin/ซิงค์ของ Wink White & Vida Zinc Biotin → แนะนำพลิกกล่องเช็กอีกที
+    </div>
+  </section>
+
+  <footer>
+    <div>เอกสารนี้เป็นความรู้ทั่วไปเพื่อช่วยจัดระเบียบการกิน ไม่ใช่คำแนะนำทางการแพทย์</div>
+    <div>มีโรคประจำตัว · กินยาประจำ · ตั้งครรภ์ → ปรึกษาเภสัชกร/แพทย์ก่อน (โดยเฉพาะเรื่องซิงค์รวมและ L-arginine)</div>
+    <div class="mono" style="margin-top:8px">สรุป ณ มิถุนายน 2026</div>
+  </footer>
+
+</div>
+</body>
+</html>

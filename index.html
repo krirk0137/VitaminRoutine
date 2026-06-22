@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>คู่มือวิตามิน — เปรียบเทียบ GPT · Gemini · Claude</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f172a;
+    --bar:#111c33;
+    --ink:#e7edf5;
+    --muted:#93a3bb;
+    --gpt:#10a37f;
+    --gemini:#3b82f6;
+    --claude:#d97757;
+    --line:rgba(255,255,255,.10);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Sarabun","IBM Plex Sans Thai",system-ui,sans-serif;
+    display:flex;
+    flex-direction:column;
+  }
+  header{
+    padding:18px 22px 0;
+    background:var(--bar);
+    border-bottom:1px solid var(--line);
+  }
+  header h1{
+    font-family:"IBM Plex Sans Thai",sans-serif;
+    font-weight:700;
+    font-size:20px;
+    margin:0 0 2px;
+  }
+  header p{
+    margin:0 0 14px;
+    color:var(--muted);
+    font-size:13.5px;
+  }
+  .tabs{
+    display:flex;
+    gap:6px;
+  }
+  .tab{
+    appearance:none;
+    border:1px solid var(--line);
+    border-bottom:none;
+    background:transparent;
+    color:var(--muted);
+    font-family:inherit;
+    font-weight:600;
+    font-size:14.5px;
+    padding:11px 20px;
+    border-radius:10px 10px 0 0;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    transition:background .15s,color .15s;
+  }
+  .tab:hover{color:var(--ink);background:rgba(255,255,255,.04)}
+  .tab .dot{width:9px;height:9px;border-radius:50%;flex:none}
+  .tab[data-src="gpt"] .dot{background:var(--gpt)}
+  .tab[data-src="gemini"] .dot{background:var(--gemini)}
+  .tab[data-src="claude"] .dot{background:var(--claude)}
+  .tab.active{
+    color:var(--ink);
+    background:var(--bg);
+    box-shadow:inset 0 3px 0 currentColor;
+  }
+  .tab[data-src="gpt"].active{color:var(--gpt)}
+  .tab[data-src="gemini"].active{color:var(--gemini)}
+  .tab[data-src="claude"].active{color:var(--claude)}
+
+  main{flex:1;min-height:0;background:var(--bg)}
+  iframe{
+    width:100%;
+    height:100%;
+    border:0;
+    display:none;
+    background:#fff;
+  }
+  iframe.active{display:block}
+
+  @media (max-width:560px){
+    .tab{padding:10px 13px;font-size:13.5px}
+    header h1{font-size:17px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>คู่มือวิตามิน &amp; อาหารเสริม</h1>
+  <p>แผนเดียวกัน เรียบเรียงโดย 3 AI — เลือกแท็บเพื่อเปรียบเทียบ</p>
+  <div class="tabs">
+    <button class="tab active" data-src="gpt"><span class="dot"></span>GPT</button>
+    <button class="tab" data-src="gemini"><span class="dot"></span>Gemini</button>
+    <button class="tab" data-src="claude"><span class="dot"></span>Claude</button>
+  </div>
+</header>
+
+<main>
+  <iframe class="active" data-src="gpt" src="GPTVitamin.html" title="แผนวิตามินจาก GPT"></iframe>
+  <iframe data-src="gemini" src="GeminiVitamin.html" title="แผนวิตามินจาก Gemini"></iframe>
+  <iframe data-src="claude" src="ClaudeVitamin.html" title="แผนวิตามินจาก Claude"></iframe>
+</main>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const frames = document.querySelectorAll('iframe');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const src = tab.dataset.src;
+      tabs.forEach(t => t.classList.toggle('active', t === tab));
+      frames.forEach(f => f.classList.toggle('active', f.dataset.src === src));
+    });
+  });
+</script>
+
+</body>
+</html>
